@@ -2,8 +2,9 @@ const express = require("express");
 const { ApolloServer } = require("apollo-server-express");
 const path = require("path");
 const db = require("./config/connection");
-const routes = require("./routes");
+//const routes = require("./routes");
 const { typeDefs, resolvers } = require("./schemas");
+const authMiddleware = require("./auth");
 
 const PORT = process.env.PORT || 3001;
 const app = express();
@@ -26,7 +27,7 @@ app.get("/", (req, res) => {
 
 app.use(routes);
 
-const startApolloServer = async () => {
+const startApolloServer = async (typeDefs, resolvers) => {
   await server.start();
   server.applyMiddleware({ app });
 
@@ -36,3 +37,5 @@ const startApolloServer = async () => {
     );
   });
 };
+
+startApolloServer(typeDefs, resolvers);
